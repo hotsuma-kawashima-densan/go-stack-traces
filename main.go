@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+
+	"github.com/m-mizutani/goerr"
 )
 
 func init() {
@@ -31,8 +33,7 @@ func service() (interface{}, error) {
 	err := query()
 
 	if err != nil {
-		slog.Error("クエリーでエラーが発生", "cause", err)
-		return nil, fmt.Errorf("クエリーでエラーが発生")
+		return nil, goerr.Wrap(err, "クエリーでエラーが発生")
 	}
 
 	return struct{}{}, nil
