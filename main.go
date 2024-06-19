@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -23,33 +22,15 @@ func main() {
 }
 
 func handler() {
-	_, err := service(1)
+	_, err := service()
 
 	if err != nil {
-		slog.Error("1 エラーが発生しました", "cause", err)
-	}
-
-	if errors.Is(err, SentinelError) {
-		println(fmt.Sprintf("error is SentinelError: %#v", err))
-	}
-
-	_, err = service(2)
-
-	if err != nil {
-		slog.Error("2 エラーが発生しました", "cause", err)
-	}
-
-	var queryError *QueryError
-
-	if errors.As(err, &queryError) {
-		println(fmt.Sprintf("unwrap error: %#v", queryError))
+		slog.Error("エラーが発生しました", "cause", err)
 	}
 }
 
-type Param int
-
-func service(param Param) (interface{}, error) {
-	err := query(param)
+func service() (interface{}, error) {
+	err := query()
 
 	if err != nil {
 		return nil, goerr.Wrap(err, "クエリーでエラーが発生")
@@ -58,23 +39,6 @@ func service(param Param) (interface{}, error) {
 	return struct{}{}, nil
 }
 
-var SentinelError = errors.New("query function error")
-
-type QueryError struct {
-	message string
-}
-
-func (e *QueryError) Error() string {
-	return e.message
-}
-
-func query(param Param) error {
-	switch param {
-	case 1:
-		return SentinelError
-	case 2:
-		return &QueryError{message: "クエリーでエラーが発生"}
-	default:
-		panic("unexpected")
-	}
+func query() error {
+	return fmt.Errorf("エラー")
 }
