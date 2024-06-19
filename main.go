@@ -31,7 +31,8 @@ func service() (interface{}, error) {
 	err := query()
 
 	if err != nil {
-		return nil, fmt.Errorf("クエリエラー")
+		slog.Error("クエリーでエラーが発生", "cause", err)
+		return nil, fmt.Errorf("クエリーでエラーが発生")
 	}
 
 	return struct{}{}, nil
