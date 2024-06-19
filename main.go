@@ -16,8 +16,17 @@ func init() {
 }
 
 func main() {
+	handler()
+}
 
-	err := fmt.Errorf("エラー")
+func handler() {
+	_, err := service()
 
-	slog.Error("ログ出力", "cause", err)
+	if err != nil {
+		slog.Error("エラーが発生しました", "cause", err)
+	}
+}
+
+func service() (interface{}, error) {
+	return nil, fmt.Errorf("エラー")
 }
