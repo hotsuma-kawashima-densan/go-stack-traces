@@ -28,5 +28,15 @@ func handler() {
 }
 
 func service() (interface{}, error) {
-	return nil, fmt.Errorf("エラー")
+	err := query()
+
+	if err != nil {
+		return nil, fmt.Errorf("クエリエラー")
+	}
+
+	return struct{}{}, nil
+}
+
+func query() error {
+	return fmt.Errorf("エラー")
 }
